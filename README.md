@@ -6,8 +6,9 @@ C++ code for clustering using heat flow
 The algorithm first constructs a graph from a vector of data using a version of k nearest neighbors. Then heat dissipation on this graph is used as a dimension reduction map. The resulting one dimensional data points are clustered using a kernel density estimator.
 
 ## Parameters
--)ConcentrationRadius, see kNN Graph
+-) ConcentrationRadius, see kNN Graph
 -) timeScale, see heat dissipation
+-) significance, see 1D clustering
 
 ## Implementation
 
@@ -26,4 +27,4 @@ Once a source and a time are selected the Graph is mapped to a one dimensional v
 We do so whenever gradient (in time) of heat becomes small at source node.
 
 ### 1D clustering
-
+This is using step functions of fixed bandwidth depending on data size to approximate the density function. We label a cluster if density between points of high density drops significantly. This is tuned using parameter significance. Higher significance means clusters need to be separated more clearly.
