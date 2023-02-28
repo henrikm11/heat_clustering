@@ -98,8 +98,29 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
             }
         }
     }
+
+    //normalize distances in graph so that min distance is 1
+    double minDist=std::numeric_limits<double>::infinity();    
+    for(int i=0; i<kNN->size(); i++)
+    {
+        Node* currNode = kNN->getVertex(i);
+        for(const auto& [nb, dist] : currNode->neighbors_)
+        {
+            minDist=std::min(minDist,dist);
+        }
+    }
+    for(int i=0; i<kNN->size(); i++)
+    {
+        Node* currNode = kNN->getVertex(i);
+        for(auto& [nb, dist] : currNode->neighbors_)
+        {
+            dist/=minDist;
+        }
+    }
+
+
     
-    std::cout << "Start heat clustering." << std::endl;
+    std::cout << "Start heat clustering, size:" << kNN->size() << std::endl;
     
     std::unordered_map<Node*,int> clusterLabels;
     for(int i=0; i<G->size();i++){
@@ -142,8 +163,16 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
             for(const auto& [node, clusterLabel] : clusterLabelsOnComponent){
                  
                 int idx = kNN->getLabel(node); //index of corresponding data point
-               
-                clusterLabels[G->getVertex(idx)]=clusterLabel+clusterLabelCorrection;
+
+                if(clusterLabel==-1){
+                    //case in which not assigned to any cluster within ith component
+                    clusterLabels[G->getVertex(idx)]=-i-1;
+
+                }
+                else{
+                    //case that it is assigned to a cluster within ith component
+                    clusterLabels[G->getVertex(idx)]=clusterLabel+clusterLabelCorrection;
+                }
                 temp=std::max(temp,clusterLabel);
                 
             }
