@@ -18,3 +18,12 @@ Construct symmetric kNN graph, default value for k is roughly k~log(n), where n 
 
 ### heat dissipation
 Heat dissipation is modeled using a simple Euler approximation for the heat equation, timeScale is the size of time steps in approximation.
+Initial conditions are 0 everywhere except in a source Node.
+Source node is selected to have high likelihood to be contained in a cluster.
+
+### dimension reduction
+Once a source and a time are selected the Graph is mapped to a one dimensional vector by checking heat at nodes at that time given intial distribution described above.
+We do so whenever gradient (in time) of heat becomes small at source node.
+
+### 1D clustering
+
