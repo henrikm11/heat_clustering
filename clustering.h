@@ -1,14 +1,12 @@
 //clustering.h
-//single header file for clustering project, used to link graph.cpp and heatFlow.cpp
-/*
-TODO:
--)Destructors?!
--)getDistances for graph has to be changed->use labels, done?
--) update constructors, there are a bunch of new member variables for Graph
+//single header file for heat clustering
+/*included in:
+1Dclustering.cpp
+clustering.cpp
+graph.cpp
+heatFlow.cpp
+kNN.cpp
 */
-
-
-//include const in many places...
 
 
 #include <unordered_map>
@@ -111,10 +109,64 @@ Graph* getMinkNN(const std::vector<std::vector<double>>&, int); //returns min kN
 
 //clustering functions
 
+//selects start node for heat dissipation in clustering algorithm
 Node* selectStartNode(const Graph*,const std::unordered_map<Node*,int>*);
-std::vector<int> heatClustering(const std::vector<std::vector<double>>&, double minClusterSize=0.1); //returns labels of cluster on data
-std::unordered_map<Node*,int> heatClustering(Graph*, double minClusterSize=0.1, double concentrationRadius=1, bool=false);   //returns labels of cluster on data
-std::unordered_map<double,int>* oneDimensionalClustering(std::vector<double>&, double, double, double);
+
+//performs heat clustering on input data
+/*Format
+INPUT
+
+vector of data
+
+OUTPUT
+
+Labels of cluster on data pointnegative value -(i+1) indicate data point belongs to ith component (0 indexed) of kNN but not assigned to any cluster within that component
+
+see function below for more details on parameters
+*/
+std::vector<int> heatClustering(const std::vector<std::vector<double>>&, double minClusterSize=0.1, double concentrationRadius=0.5);
+
+//performs heat clustering on input data given as graph
+/*Format
+INPUT: 
+
+graph of data
+
+minimal size of cluster minClusterSize in (0,1], default = 0.1
+we require clusters to have at least minClusterSize*data.size() many points
+
+concentrationRadius for constructing kNN, default = 0.5
+replaces euclidean distances d by 1/exp(-d^2/concentrationRadius), 
+if concentrationRadius is small this favors points nearby more 
+concentrationRadius=0 is keeping euclidean distances by convention
+
+ADDITIONAL CONST PARAMETERS - change in function directly:
+
+timeScale - smaller is more accurate but computationally 
+bandWidth
+significance 
+k
+
+OUTPUT:
+
+Labels of cluster on data points
+negative value -(i+1) indicate data point belongs to ith component (0 indexed) of kNN but not assigned to any cluster within that component
+*/
+std::unordered_map<Node*,int> heatClustering(Graph*, double minClusterSize=0.1, double concentrationRadius=0.5, bool=false);   
+
+//performs 1D clustering using kernel density estimator
+/*
+INPUT:
+
+one dimensional data
+bandWidth used in step function to estimate density
+significance to determine when to assig clusters
+
+OUTPUT:
+
+labels on data points
+*/
+std::unordered_map<double,int>* oneDimensionalClustering(std::vector<double>&, double significance, double bandWidth, double minClusterSize);
 
 
 
