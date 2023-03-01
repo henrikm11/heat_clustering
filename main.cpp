@@ -4,6 +4,7 @@
 
 #include<iostream>
 #include <iomanip>
+<<<<<<< HEAD
 #include <random>
 
 
@@ -77,6 +78,14 @@ int main(){
 
     
 
+=======
+
+
+int main(){ 
+    
+    std::vector<std::vector<double>> data;
+
+>>>>>>> parent of f35a29a (Delete main.cpp)
     //uniform square
     /*
    
@@ -99,6 +108,7 @@ int main(){
     
 
    //bunch of squares
+<<<<<<< HEAD
     /*
     for(int i=0; i<40; i++){
         for(int j=0; j<40; j++){
@@ -108,6 +118,17 @@ int main(){
             double y=-j;
             y=0.5*y;
             y-=0.2;
+=======
+    
+    for(int i=0; i<20; i++){
+        for(int j=0; j<20; j++){
+            double x=-i;
+            x=0.5*x;
+            x-=0.1;
+            double y=-j;
+            y=0.5*y;
+            y-=0.1;
+>>>>>>> parent of f35a29a (Delete main.cpp)
             data.push_back({x,y});  
         }
     }
@@ -127,7 +148,11 @@ int main(){
     }
 
     
+<<<<<<< HEAD
      for(int i=0; i<50; i++){
+=======
+     for(int i=0; i<100; i++){
+>>>>>>> parent of f35a29a (Delete main.cpp)
         for(int j=0; j<50; j++){
             double x=i;
             x=0.1*x;
@@ -149,7 +174,11 @@ int main(){
     }
 
     
+<<<<<<< HEAD
     */
+=======
+    
+>>>>>>> parent of f35a29a (Delete main.cpp)
 
     //circles
    /*
@@ -305,7 +334,11 @@ int main(){
 
     for(const auto& [key, value] : counts){
         if(value>2){
+<<<<<<< HEAD
         std::cout << key << ":" << value << std::endl;
+=======
+        std::cout <<value << std::endl;
+>>>>>>> parent of f35a29a (Delete main.cpp)
         }
     }
 
