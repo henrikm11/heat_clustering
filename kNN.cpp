@@ -6,7 +6,6 @@
 
 //in all functions the order of nodes/labeling is preserved!
 
-//as of now it only uses square of Euclidean distance as weights in graph
 
 #include "clustering.h"
 
@@ -229,22 +228,6 @@ Graph* getMaxkNNHelper(Graph* prekNN){
             nb->neighbors_[currNode]=dist;
 
         }
-        /*OLD
-        auto it = currNode->neighbors_.begin();
-        while(it!=currNode->neighbors_.end()){    
-            newNeighbors.push_back(*it);//{it->first,it->second});
-            it++;
-        }
-        {
-            it->first->neighbors_[currNode]=it->second; //changes size of it
-            it++;
-        }
-        */
-        /*
-        for(auto& [key,dist] : currNode->neighbors_){
-            key->neighbors_[currNode]=dist;
-        }  
-        */  
     }
     return prekNN;
 }
