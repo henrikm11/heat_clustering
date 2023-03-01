@@ -30,7 +30,7 @@ Graph* getPrekNN(const std::vector<std::vector<double>>& data, int k){
         {   
             for(int l = 0; l < d; l++)
             {   
-                //so far we use (square of) standard Euclidean distances
+                //square of standard Euclidean distances
                 distances[i][j]+=((data[i][l]-data[j][l])*(data[i][l]-data[j][l]));
             }
            
@@ -135,8 +135,6 @@ Graph* getPrekNN(const std::vector<std::vector<double>>& data, int k){
 }
 
 
-//adjust for change in mult_ everywhere below
-
 
 //returns directed kNN graph of G, i.e for each vertex we select the k closest of its direct neighbors
 //only selected new neighbors among old neighbors
@@ -202,6 +200,7 @@ Graph* getMinkNNHelper(Graph* prekNN){
 
 //returns minimal kNN, 
 //there is an edge between a and b iff a is among k closest neighbors to b and vice versa
+//distances are squared euclidean distance
 Graph* getMinkNN(const std::vector<std::vector<double>>& data, int k){
     return getMinkNNHelper(getPrekNN(data,k));
 }
@@ -234,6 +233,7 @@ Graph* getMaxkNNHelper(Graph* prekNN){
 
 //returns maximal kNN
 //there is an edge between a and b if a is among k closest neighbors to a or b among k closest nb to a
+//distances are squared euclidean distance
 Graph* getMaxkNN(Graph* G, int k){
     return getMaxkNNHelper(getPrekNN(G,k));
 }
