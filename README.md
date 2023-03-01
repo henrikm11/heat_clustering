@@ -1,6 +1,6 @@
 # Heat-clustering
 
-C++ code for clustering using heat flow
+C++ code for clustering using heat flow, requires c++17 or more recent.
 
 ## Some background
 The algorithm first constructs a graph from a vector of data using a version of k nearest neighbors. 
