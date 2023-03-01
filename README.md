@@ -8,7 +8,7 @@ Then heat dissipation on this graph is used as a dimension reduction map.
 The resulting one dimensional data points are clustered using a kernel density estimator.
 
 ## Parameters
--) minClusterSize, see 1D clustering
+-) minClusterSize, see 1D clustering \
 -) ConcentrationRadius, see kNN Graph \
 -) timeScale, see heat dissipation \
 -) significance, see 1D clustering \
