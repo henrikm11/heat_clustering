@@ -4,11 +4,78 @@
 
 #include<iostream>
 #include <iomanip>
+#include <random>
 
 
 int main(){ 
-    
+
     std::vector<std::vector<double>> data;
+
+    //set pseudo random number generator
+    std::random_device rd{};
+    std::mt19937 generator{rd()};
+
+    //boxes with random noise
+    /*
+    //generate 500 data points normally distributed around (0,0), correlation matrix is diag(1,2)
+    std::uniform_real_distribution<> uniform_x1(-1.0, 1.0);
+    std::uniform_real_distribution<> uniform_y1(-1.0, 1.0);
+    std::normal_distribution<double> normal_x1(0.0,0.1);
+    std::normal_distribution<double> normal_y1(0.0,0.2);
+    int size1=1000;
+
+    for(int i=0; i<size1; i++){
+        double x = uniform_x1(generator)+normal_x1(generator);
+        double y = uniform_y1(generator)+normal_y1(generator);
+        data.push_back({x,y});
+    }
+
+    //generate 200 data points normally distributed around (0,0), correlation matrix is diag(1,2)
+    std::uniform_real_distribution<> uniform_x2(1.3, 3.0);
+    std::uniform_real_distribution<> uniform_y2(0.0, 2.0);
+    std::normal_distribution<double> normal_x2(0.0,0.2);
+    std::normal_distribution<double> normal_y2(0.0,0.1);
+    int size2=500;
+    
+    for(int i=0; i<size2; i++){
+        double x = uniform_x2(generator)+normal_x2(generator);
+        double y = uniform_y2(generator)+normal_y2(generator);
+        data.push_back({x,y});
+    }
+    */
+    
+
+    //circles with random noise
+    std::uniform_real_distribution<double> uniform_interval(0, 1.0);
+    std::normal_distribution<double> noise(0,0.1);
+    const double PI = atan(1)*4;
+
+    //annulus, inner radius 1, outer radius 2, plus normal noise
+    for(int i=0; i<500; i++){
+        double angle = uniform_interval(generator);
+        double radius = uniform_interval(generator);
+        double noise_x = noise(generator);
+        double noise_y = noise(generator);
+        double x = radius*cos(2*PI*angle) + noise_x;
+        double y = radius*sin(2*PI*angle) +  noise_y;
+        data.push_back({x,y});
+    }
+
+    //annulus, inner radius 2.55, outer radius 2.95, plus normal noise
+    for(int i=0; i<1000; i++){
+        double angle = uniform_interval(generator);
+        double radius = 1.5+uniform_interval(generator)/2;
+        double noise_x = noise(generator);
+        double noise_y = noise(generator);
+        double x = radius*cos(2*PI*angle) + noise_x;
+        double y = radius*sin(2*PI*angle) +  noise_y;
+        data.push_back({x,y});
+    }
+
+   
+
+
+    
 
     //uniform square
     /*
@@ -32,15 +99,15 @@ int main(){
     
 
    //bunch of squares
-    
-    for(int i=0; i<20; i++){
-        for(int j=0; j<20; j++){
+    /*
+    for(int i=0; i<40; i++){
+        for(int j=0; j<40; j++){
             double x=-i;
             x=0.5*x;
-            x-=0.1;
+            x-=0.2;
             double y=-j;
             y=0.5*y;
-            y-=0.1;
+            y-=0.2;
             data.push_back({x,y});  
         }
     }
@@ -60,7 +127,7 @@ int main(){
     }
 
     
-     for(int i=0; i<100; i++){
+     for(int i=0; i<50; i++){
         for(int j=0; j<50; j++){
             double x=i;
             x=0.1*x;
@@ -82,7 +149,7 @@ int main(){
     }
 
     
-    
+    */
 
     //circles
    /*
@@ -238,7 +305,7 @@ int main(){
 
     for(const auto& [key, value] : counts){
         if(value>2){
-        std::cout <<value << std::endl;
+        std::cout << key << ":" << value << std::endl;
         }
     }
 
