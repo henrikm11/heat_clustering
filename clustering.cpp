@@ -160,7 +160,6 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
                 {
                     //case in which not assigned to any cluster within ith component
                     clusterLabels[G->getVertex(idx)]=-i-1;
-
                 }
                 else
                 {
@@ -284,12 +283,7 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
                     Node* currNodekNN=kNN->getVertex(i);
                     Node* currNodeG=G->getVertex(i);
                     auto it=(*heatLabel).find(heatDistribution[currNodekNN]);
-                    if(it==(*heatLabel).end())
-                    {
-                        continue;
-                        clusterLabels[currNodeG]=-1;
-                        clusterLabelskNN[currNodekNN]=-1;
-                    }
+                    if(it==(*heatLabel).end()){continue;}
                     else if(clusterLabels[currNodeG]==-1)
                     {
                         //checks if we have already labeled here
