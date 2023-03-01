@@ -1,9 +1,5 @@
 //heatFlow.cpp
-
 //contains implementation of simulation of heat flow on graphs
-
-//TO DO: How to handle the case of distance zero in heat flow?
-
 
 #include "clustering.h"
 
@@ -12,11 +8,14 @@ std::unordered_map<Node*, double> Graph::laplacian(const std::unordered_map<Node
     //built in check if size of vertices of graph matches size of func
     int s = this->size();
     int count=0;
-    if(!admissible){
+    if(!admissible)
+    {
         //check if function is defined on given graph
         std::unordered_map<Node*,int> vertexCount;
-        for (int i = 0; i < s; i++){
-            if(vertexCount.count(this->vertices_[i])>0 || count > s){
+        for (int i = 0; i < s; i++)
+        {
+            if(vertexCount.count(this->vertices_[i])>0 || count > s)
+            {
                 std::cout << "Function is not defined on graph" << std::endl;
                 exit(1);
             }
@@ -33,17 +32,12 @@ std::unordered_map<Node*, double> Graph::laplacian(const std::unordered_map<Node
     {    
         Node* currNode=this->getVertex(i);
         lap[this->getVertex(i)]=0;
-        for(const auto& [key,value] :currNode->neighbors_){
+        for(const auto& [key,value] :currNode->neighbors_)
+        {
             //[key,value] is neighbouring Node*, weight
             double con;
-            if (value!=0)    
-            {
-                con=1/value;
-            }
-            else{
-                con=0;
-                //these terms are taken into account through mult_
-            }
+            if (value!=0){con=1/value;}
+            else{con=0;} //these terms are taken into account through mult_
             lap[this->vertices_[i]]+=
             ((key->mult_)*func.at(key)-(currNode->mult_)*func.at(currNode))*con;
         }
@@ -58,17 +52,16 @@ std::unordered_map<Node*, double> Graph::laplacian(const std::unordered_map<Node
 void Graph::heatIterationStep(double timeScale, std::unordered_map<Node*,double>& func, bool& admissible){
     int s = this->size();
     std::unordered_map<Node*, double> lap=this->laplacian(func, admissible);
-    for (int i = 0; i < s; i++){
+    for (int i = 0; i < s; i++)
+    {
         func[this->vertices_[i]]+=(timeScale*lap[this->vertices_[i]]);
     }
     return;
 }
 
-//performs (unweighted) diameter many steps of heat iteration
+//computes heat evolution over time using approximations of size timeScale
 void Graph::heatDiffusion(double time, double timeScale, std::unordered_map<Node*,double>& func, bool& admissible){
-    //int k=time/timeScale;
-    //k+=1;
-    int k = 1; //change back!
+    int k=time/timeScale+1;
     for (int i = 0; i < k; i++)
     {
         this->heatIterationStep(timeScale, func, admissible);
