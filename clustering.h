@@ -168,6 +168,7 @@ labels on data points
 */
 std::unordered_map<double,int>* oneDimensionalClustering(std::vector<double>&, double significance, double bandWidth, double minClusterSize);
 
-
+//testing
+void testClustering(void);
 
 
