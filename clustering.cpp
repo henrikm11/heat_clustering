@@ -92,7 +92,7 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
         }
     }
 
-    //normalize distances in graph so that min distance is 1
+    //normalize distances in graph so that min distance is 1/2
     double minDist=std::numeric_limits<double>::infinity();    
     for(int i=0; i<kNN->size(); i++)
     {
@@ -107,7 +107,7 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
         Node* currNode = kNN->getVertex(i);
         for(auto& [nb, dist] : currNode->neighbors_)
         {
-            dist/=(10*minDist);
+            dist/=(2*minDist);
         }
     }
     
@@ -128,7 +128,7 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
     {
         
        
-        std::cout << "not connected" << std::endl;
+        
         int numberOfComponents=kNN->connectedCompCount();
         std::vector<Graph*> components; //stores pointer to each component of kNN
         for (int i = 0; i < numberOfComponents; i++)
@@ -176,7 +176,7 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
         return clusterLabels;
     }
     
-   
+   std::cout << "size=" << kNN->size() <<std::endl;
   
     bool admissible=true; //have made sure ourselves above  
     double cutOffStep=minClusterSize/2; 

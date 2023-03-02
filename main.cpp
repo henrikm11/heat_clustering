@@ -4,7 +4,6 @@
 
 #include<iostream>
 #include <iomanip>
-<<<<<<< HEAD
 #include <random>
 
 
@@ -48,29 +47,38 @@ int main(){
 
     //circles with random noise
     std::uniform_real_distribution<double> uniform_interval(0, 1.0);
-    std::normal_distribution<double> noise(0,0.1);
+    std::normal_distribution<double> noise(0,1);
     const double PI = atan(1)*4;
 
     //annulus, inner radius 1, outer radius 2, plus normal noise
-    for(int i=0; i<500; i++){
+    
+    for(int i=0; i<250; i++){
         double angle = uniform_interval(generator);
-        double radius = uniform_interval(generator);
+        double radius = uniform_interval(generator)/1.2;
         double noise_x = noise(generator);
         double noise_y = noise(generator);
         double x = radius*cos(2*PI*angle) + noise_x;
         double y = radius*sin(2*PI*angle) +  noise_y;
         data.push_back({x,y});
     }
+    
 
-    //annulus, inner radius 2.55, outer radius 2.95, plus normal noise
+    //annulus, inner radius 5, outer radius 5.1, plus normal noise
     for(int i=0; i<1000; i++){
         double angle = uniform_interval(generator);
-        double radius = 1.5+uniform_interval(generator)/2;
+        double radius = 5+uniform_interval(generator)/10;
         double noise_x = noise(generator);
         double noise_y = noise(generator);
-        double x = radius*cos(2*PI*angle) + noise_x;
+        double x = radius*cos(2*PI*angle) + noise_x/2;
         double y = radius*sin(2*PI*angle) +  noise_y;
         data.push_back({x,y});
+    }
+
+    for(int i=0; i<500; i++){
+        double x = uniform_interval(generator)+7+noise(generator)/2;
+        double y = uniform_interval(generator)+noise(generator)/15;
+        data.push_back({x,y});
+
     }
 
    
@@ -78,14 +86,6 @@ int main(){
 
     
 
-=======
-
-
-int main(){ 
-    
-    std::vector<std::vector<double>> data;
-
->>>>>>> parent of f35a29a (Delete main.cpp)
     //uniform square
     /*
    
@@ -108,7 +108,6 @@ int main(){
     
 
    //bunch of squares
-<<<<<<< HEAD
     /*
     for(int i=0; i<40; i++){
         for(int j=0; j<40; j++){
@@ -118,7 +117,6 @@ int main(){
             double y=-j;
             y=0.5*y;
             y-=0.2;
-=======
     
     for(int i=0; i<20; i++){
         for(int j=0; j<20; j++){
@@ -128,7 +126,6 @@ int main(){
             double y=-j;
             y=0.5*y;
             y-=0.1;
->>>>>>> parent of f35a29a (Delete main.cpp)
             data.push_back({x,y});  
         }
     }
@@ -148,11 +145,7 @@ int main(){
     }
 
     
-<<<<<<< HEAD
      for(int i=0; i<50; i++){
-=======
-     for(int i=0; i<100; i++){
->>>>>>> parent of f35a29a (Delete main.cpp)
         for(int j=0; j<50; j++){
             double x=i;
             x=0.1*x;
@@ -174,11 +167,7 @@ int main(){
     }
 
     
-<<<<<<< HEAD
     */
-=======
-    
->>>>>>> parent of f35a29a (Delete main.cpp)
 
     //circles
    /*
@@ -334,11 +323,7 @@ int main(){
 
     for(const auto& [key, value] : counts){
         if(value>2){
-<<<<<<< HEAD
         std::cout << key << ":" << value << std::endl;
-=======
-        std::cout <<value << std::endl;
->>>>>>> parent of f35a29a (Delete main.cpp)
         }
     }
 
