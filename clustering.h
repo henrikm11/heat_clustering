@@ -111,6 +111,8 @@ Graph* getMinkNN(const std::vector<std::vector<double>>&, int); //returns min kN
 
 //selects start node for heat dissipation in clustering algorithm
 Node* selectStartNode(const Graph*,const std::unordered_map<Node*,int>*);
+void distanceNormalization(Graph*, double concentrationRadius);
+std::vector<Graph*> splitIntoComponents(Graph*);
 
 //performs heat clustering on input data
 /*Format
@@ -153,6 +155,7 @@ Labels of cluster on data points
 negative value -(i+1) indicate data point belongs to ith component (0 indexed) of kNN but not assigned to any cluster within that component
 */
 std::unordered_map<Node*,int> heatClustering(Graph*, double minClusterSize=0.1, double concentrationRadius=0.5, bool=false);   
+std::unordered_map<Node*,int> heatClusteringConnected(Graph*, double minClusterSize, double concentrationRadius, bool reduced, double time, double timeScale, double significance, double bandWidth); 
 
 //performs 1D clustering using kernel density estimator
 /*
