@@ -42,11 +42,13 @@ std::vector<int> heatClustering(const std::vector<std::vector<double>>& data, do
     {
         clusterLabels[kNN->getLabel(node)]=clusterLabel;
     }
+    delete kNN;
     return clusterLabels;
 }
 
 
-void distanceNormalization(Graph* G, double concentrationRadius){
+//changes distances d to exp(-d*concentrationRadius)
+void distanceGaussian(Graph* G, double concentrationRadius){
     if(concentrationRadius==0){return;}
     for (int i = 0; i < G->size(); i++)
         {
@@ -68,8 +70,11 @@ void distanceNormalization(Graph* G, double concentrationRadius){
                 }
             }
         }
+}
 
-    //normalize distances in graph so that min distance is 1/2
+
+//normalize distances in graph so that min distance is 1/2
+void distanceScaling(Graph* G){
     double minDist=std::numeric_limits<double>::infinity();    
     for(int i=0; i<G->size(); i++)
     {
@@ -91,6 +96,16 @@ void distanceNormalization(Graph* G, double concentrationRadius){
     return;
 }
 
+void distanceNormalization(Graph* G, double concentrationRadius){
+    //change to Gaussian distances first
+    distanceGaussian(G, concentrationRadius);
+
+    //normalize distances in graph so that min distance is 1/2
+    distanceScaling(G);
+    
+    return;
+}
+
 std::vector<Graph*> splitIntoComponents(Graph* G){
     int numberOfComponents=G->connectedCompCount();
     std::vector<Graph*> components; //stores pointer to each component of G
@@ -105,7 +120,7 @@ std::vector<Graph*> splitIntoComponents(Graph* G){
         int compLab = G->connectedCompLabel(currNode);
         components[compLab]->insert(currNode); //insert node into corresponding component
     }
-    
+    //new Graphs that are components are stored in return vector so no leakage
     return components;
 
 }
@@ -136,6 +151,7 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
     //normalize distances and split into connected components
     distanceNormalization(kNN, concentrationRadius);
     std::vector<Graph*> components = splitIntoComponents(kNN); //split into connected components
+    //need to delete these later!
 
     //initialize all labels to -1
     std::unordered_map<Node*,int> clusterLabels;
@@ -184,11 +200,15 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
             clusterLabelCorrection =  temp+1;
             std::cout << "Correction:" << clusterLabelCorrection << std::endl;
         }
-
+        for(int i=0; i<numberOfComponents; i++){
+            delete components[i]; //preventi leakage
+        }
+        delete kNN; //prevent leakage
         return clusterLabels;
     }
 
     //from here on we may assume that kNN is connected
+    delete components[0];
     std::cout << "size=" << kNN->size() <<std::endl;
     clusterLabelskNN = heatClusteringConnected(kNN, minClusterSize, concentrationRadius, reduced, time, timeScale, significance, bandWidth);
     for(int i=0 ; i<kNN->size(); i++){
@@ -196,6 +216,7 @@ std::unordered_map<Node*,int> heatClustering(Graph* G, double minClusterSize, do
         clusterLabels[G->getVertex(i)]=label;
     }
     
+    delete kNN;
     return clusterLabels;
 }
 
