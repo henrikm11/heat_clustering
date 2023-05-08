@@ -37,7 +37,7 @@ public:
     Graph(std::vector<Node*>); //initializes graph with given vertices
     Graph(Graph&); //copy constructor
     Graph& operator=(Graph&); //copy assignment
-    ~Graph(void); // destructor, let's check later if we need to write a custom one
+    //~Graph(void); // destructor, let's check later if we need to write a custom one
 
     //basic functions accessing private member variables
 
@@ -111,6 +111,8 @@ Graph* getMinkNN(const std::vector<std::vector<double>>&, int); //returns min kN
 
 //selects start node for heat dissipation in clustering algorithm
 Node* selectStartNode(const Graph*,const std::unordered_map<Node*,int>*);
+void distanceGaussian(Graph*, double);
+void distanceScaling(Graph*);
 void distanceNormalization(Graph*, double concentrationRadius);
 std::vector<Graph*> splitIntoComponents(Graph*);
 
