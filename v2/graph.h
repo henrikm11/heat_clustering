@@ -69,8 +69,6 @@ private:
 class Graph{
 public:
     Graph(void); //default constructor, initializes empty graph
-    //constructor for vector of nodes??
-    //if passed as pointers no copy, otherwise copy?
     Graph(const std::vector<Node*>& vertices); //initialized with copies of given nodes on stack, this makes dealing with destructor easier
 
     //copy and assignment
@@ -100,7 +98,7 @@ public:
     double getMinDistance(void);
     bool checkSym(void);
 
-     /// @brief normalizes distances to newMinDist(=1 by defaul)
+    /// @brief normalizes distances to newMinDist(=1 by defaul)
     /// @param  newMinDist new minimum distance
     void normalizeDistances(double newMinDist=1);
 
