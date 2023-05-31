@@ -30,7 +30,7 @@ std::vector<std::vector<std::pair<int,double>>> kNNHelper::computeDistances(cons
     int d = data[0].size();
     for (size_t i = 0; i < data.size(); i++){  
         for (size_t j = 0; j<=i; j++){  
-            //j=i required to correct index in pair!
+            //j=i case required to correct index in pair!
             double dist=0; 
             for(size_t l = 0; l < d; l++){   
                 //square of standard Euclidean distances
