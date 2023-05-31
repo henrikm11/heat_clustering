@@ -72,7 +72,6 @@ void Graph::heatIterationStep(std::vector<double>& initialDist, double timeScale
         
     }
     else{
-        //everything went fine up to here
         low=newLow;
         high=newHigh;
     }
