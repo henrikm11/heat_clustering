@@ -7,10 +7,7 @@
 
 //constructors
 
-Graph::Graph()
-    :vertices_(0),
-    adjacencyLists_(0)
-    {}
+Graph::Graph(){}
 
 Graph::Graph(const std::vector<Node*>& vertices)
     :vertices_(vertices.size()),
@@ -47,7 +44,7 @@ Graph::Graph(const std::vector<Node*>& vertices)
                 adjacencyLists_[i].push_back({newLabels[nb.first],nb.second});
             }
         }
-
+        adjacencyListsValid_=true;
     }
 //end of constructor
 
@@ -86,6 +83,7 @@ Graph& Graph::operator=(const Graph& originalGraph){
     } 
 
     adjacencyLists_=originalGraph.adjacencyLists_;
+    adjacencyListsValid_=true;
 
     return *this;
 }
@@ -156,6 +154,7 @@ void Graph::insert(const Node& newNode){
         edge.first->addNeighbor({insertedNode,edge.second});
         insertedNode->addNeighbor({edge.first,edge.second});
     }
+    adjacencyListsValid_=false;
     //update adjacencyLists_
     int newIdx = vertices_.size()-1; //index of newly added node
     std::vector<std::pair<int,double>> newAdj; //adjacency for newly added node
@@ -165,6 +164,7 @@ void Graph::insert(const Node& newNode){
         newAdj.push_back({idx, edge.second});   
     }
     adjacencyLists_.push_back(newAdj);
+    adjacencyListsValid_=true;
 
     return;
 }
@@ -215,6 +215,7 @@ void Graph::insert(Node& node1, Node& node2, double dist){
                 break;
             }
         }
+        adjacencyListsValid_=false;
         for(auto& edge : adjacencyLists_[idx1]){
             if(edge.first == idx2){
                 edge.second = dist;
@@ -234,7 +235,7 @@ void Graph::insert(Node& node1, Node& node2, double dist){
         adjacencyLists_[idx1].push_back({idx2,dist});
         adjacencyLists_[idx2].push_back({idx1,dist});
     }
-
+    adjacencyListsValid_=true;
     return;
 }
 
@@ -251,14 +252,16 @@ void Graph::remove(Node* node){
     auto it =  std::remove(vertices_.begin(), vertices_.end(), node);
     vertices_.erase(it, vertices_.end());
     delete node;
+    adjacencyListsValid_=false;
     return;
 }
+
 
 void Graph::remove(Node& node1, Node& node2){
     //remove neighbors from nodes
     node1.removeNeighbor(node2);
     node2.removeNeighbor(node1);
-
+    adjacencyListsValid_=false;
     //update adjacency list
     int idx1=findNode(node1);
     int idx2=findNode(node2);
@@ -274,6 +277,26 @@ void Graph::remove(Node& node1, Node& node2){
             [idx1](std::pair<int,double> edge){return edge.first==idx1;}
         );
     adjacencyLists_[idx2].erase(it2, adjacencyLists_[idx2].end());
+    adjacencyListsValid_=true;
+    return;
+}
+
+void Graph::updateAdjacencyLists(){
+    if(adjacencyListsValid_){return;}
+
+    adjacencyLists_.clear();
+    adjacencyLists_=std::vector<std::vector<std::pair<int,double>>>(size());
+
+    std::unordered_map<Node*,int> labels;
+    for(size_t i=0; i<vertices_.size(); i++){labels[vertices_[i]]=i;}
+
+    for(size_t i=0; i<vertices_.size(); i++){
+        for(const auto& nb : vertices_[i]->neighbors_){
+            adjacencyLists_[i].push_back({labels[nb.first],nb.second});
+        }
+    }
+
+    adjacencyListsValid_=true;
     return;
 }
 
@@ -335,5 +358,4 @@ bool Graph::checkSym(){
         }
     }
     return true;
-
 }

@@ -92,6 +92,7 @@ public:
     void insert(Node&, Node&, double); //insert edge
     void remove(Node*); //remove and delete node.
     void remove(Node&, Node&);
+    void updateAdjacencyLists();
     //void remove(Node*, Node*); //removes edge between nodes if previously present
 
 
@@ -109,12 +110,13 @@ public:
     /// @param vector with ordering same vertices_ 
     std::vector<double> laplacian(const std::vector<double>&);
     void heatIterationStep(std::vector<double>& initialDist, double timeScale, double& low, double& high);
- 
+    
     
 
 private:
     std::vector<Node*> vertices_;
     //by constructors those Nodes are always on the heap
+    bool adjacencyListsValid_=false;
     std::vector<std::vector<std::pair<int,double>>> adjacencyLists_; //adjacencyLists[i] contains [j,dist_{ij}] if vertices_[i] and vertices_[j] are nbs
     friend class kNNHelper;
     friend class prekNNHelper;
