@@ -106,6 +106,7 @@ public:
     void gaussianDistances(double concentrationRadius);
 
     bool isConnected(void);
+    std::vector<int> getComponentLabels(void);
     
     
     /// @brief computes graph laplacian of function

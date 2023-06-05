@@ -376,6 +376,40 @@ bool Graph::isConnected(){
     return visited.size()==size();
 }
 
+std::vector<int> Graph::getComponentLabels(){
+    updateAdjacencyLists();
+    std::vector<int> componentLabels(size(),-1);
+    int visitedCount=0;
+    int currLabel=0;
+    int startPos=0;
+    while(visitedCount<size()){
+        std::queue<int> visitNext;\
+        //bfs label and count when pushing in queue
+        for(int i=startPos; i<size();i++){
+            if(componentLabels[i]==-1){
+                visitNext.push(i);
+                componentLabels[i]=currLabel;
+                visitedCount++;
+                startPos=i+1; //to optimize search for next starting pos
+                break;
+            }
+        }
+        while(!visitNext.empty()){
+            int currPos=visitNext.front();
+            visitNext.pop();
+            for(const auto& edge: adjacencyLists_[currPos]){
+                int newPos=edge.first;
+                if(componentLabels[newPos]!=-1){continue;}
+                componentLabels[newPos]=currLabel;
+                visitedCount++;
+                visitNext.push(newPos);
+            }
+        }
+        currLabel++;
+    }
+    return componentLabels;
+}
+
 bool Graph::checkSym(){
     for(const auto& v : vertices_){
         for(const auto& w : vertices_){
