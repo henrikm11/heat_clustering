@@ -8,10 +8,9 @@
 //helper class to split heatClustering function into various methods not to be accessed elsewhere
 class ClusteringHelper{
 private:
-    friend std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
-
+    friend std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced);
     int selectStartNode(const Graph& G, const std::vector<int>& clusterLabels);
-
+    std::vector<int> heatClusteringConnected(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
 };
 
 int ClusteringHelper::selectStartNode(const Graph& G, const std::vector<int>& clusterLabels){
@@ -44,6 +43,8 @@ std::vector<int> heatClustering(const Graph& G, double minClusterSize, double co
     std::vector<int> clusterLabels(G.size(),-1);
     int k = std::log(G.size()+1)+1;
     std::unique_ptr<Graph> kNN=getkNN(G,k);
+    ClusteringHelper Helper;
+    std::vector<int> componentLabels=kNN->getComponentLabels();
 
     /*
     
@@ -58,9 +59,11 @@ std::vector<int> heatClustering(const Graph& G, double minClusterSize, double co
     return clusterLabels;
 }
 
+std::vector<int> ClusteringHelper::heatClusteringConnected(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale){
+    std::vector<int> clusterLabels(G.size(),-1);
 
-/*
-std::vector<int> ClusteringHelper::heatClusteringConnected(const Graph& G, double minClusterSize, double concentrationRadius, )
+    return clusterLabels;
+}
 
 
-*/
+
