@@ -332,6 +332,34 @@ void Graph::normalizeDistances(double newMinDist){
     return;
 }
 
+/// @brief updates distances to gaussian distances: d -> e^(d/cR) and normalizes afterwards
+/// @param concentrationRadius 
+void Graph::gaussianDistances(double concentrationRadius){
+    if(concentrationRadius==0){
+        throw(std::invalid_argument("Graph::gaussianDistances():concentrationRadius=0"));
+    }
+    for (int i = 0; i <size(); i++){
+        //update distances for neighbors of ith vertex
+        Node currNode = getVertex(i);
+        for(auto it=currNode.neighbors_.begin(); it!=currNode.neighbors_.end();){
+            double dist = it->second;
+            double inverseRadius=std::pow(concentrationRadius,-1);
+            double expDist=std::exp(dist*inverseRadius);
+            if(expDist==HUGE_VAL){
+                    //erase edge
+                    it=currNode.neighbors_.erase(it);
+            }else{
+                it->second=expDist; //done symmetrically anyways because we loop over all nodes
+                it++;
+            }
+        }
+    }
+    normalizeDistances();
+    adjacencyListsValid_=false;
+    updateAdjacencyLists();
+    return;
+}
+
 bool Graph::isConnected(){
     if(size()<=1){return true;}
     std::set<Node*> visited;

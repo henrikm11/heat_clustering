@@ -24,6 +24,7 @@ class Node{
 public:
 //only member access functions
     std::vector<double> getCoordinates(void) const;
+    int neighborCount(void) const;
 private:
     friend class Graph;
     friend class kNNHelper;
@@ -102,6 +103,7 @@ public:
     /// @brief normalizes distances to newMinDist(=1 by defaul)
     /// @param  newMinDist new minimum distance
     void normalizeDistances(double newMinDist=1);
+    void gaussianDistances(double concentrationRadius);
 
     bool isConnected(void);
     
