@@ -8,14 +8,14 @@
 //leakage easily occurs if used by itself
 class kNNHelper{
 private:
-    Graph* getPrekNN(std::vector<std::vector<double>>& data, int k);
+    Graph* getPrekNN(const std::vector<std::vector<double>>& data, int k);
     Graph* getPrekNN(const Graph&, int k); //creates new graph
     Graph* reducePrekNN(Graph* prekNN); //removes directed edges wo/ counterpart from preKNN
     std::vector<std::vector<std::pair<int,double>>> computeDistances(const std::vector<std::vector<double>>& data);
     std::vector<int> getMults(std::vector<std::vector<std::pair<int,double>>>& distances);
     void computeAdjLists(Graph& G);
     void removeNullity(Graph& prekNN);
-    friend std::unique_ptr<Graph> getkNN(std::vector<std::vector<double>>& data, int k);
+    friend std::unique_ptr<Graph> getkNN(const std::vector<std::vector<double>>& data, int k);
     friend std::unique_ptr<Graph> getkNN(const Graph& G, int k);
 };
 
@@ -81,7 +81,7 @@ void kNNHelper::computeAdjLists(Graph& G){
 /// @param data vector of input data
 /// @param k number of neighbors
 /// @return directed graph of k nearest neighbors
-Graph* kNNHelper::getPrekNN(std::vector<std::vector<double>>& data, int k){
+Graph* kNNHelper::getPrekNN(const std::vector<std::vector<double>>& data, int k){
     assert(k<=data.size()-1);
     Graph* prekNN = new Graph();
     if(data.size()==0){return prekNN;} //no data
@@ -228,7 +228,7 @@ Graph* kNNHelper::reducePrekNN(Graph* G){
     return G;    
 }
 
-std::unique_ptr<Graph> getkNN(std::vector<std::vector<double>>& data, int k){
+std::unique_ptr<Graph> getkNN(const std::vector<std::vector<double>>& data, int k){
     kNNHelper Helper;
     Graph* kNN = Helper.reducePrekNN(Helper.getPrekNN(data,k));
     Helper.computeAdjLists(*kNN);

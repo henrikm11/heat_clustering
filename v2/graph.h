@@ -131,7 +131,7 @@ private:
 /// @param data vector of data points
 /// @param k two points are neighbors iff they both among k closest to other
 /// @return unq
-std::unique_ptr<Graph> getkNN(std::vector<std::vector<double>>& data, int k);
+std::unique_ptr<Graph> getkNN(const std::vector<std::vector<double>>& data, int k);
 std::unique_ptr<Graph> getkNN(const Graph& G, int k);
 
 
