@@ -15,6 +15,7 @@ std::vector<double> Graph::laplacian(const std::vector<double>& func){
         //func not a well defined function on graph
         throw(std::domain_error("Graph::laplacian"));
     }
+    if(!adjacencyListsValid_){updateAdjacencyLists();}
     
     std::vector<double> lap(size(),0);  
     for(size_t i =0; i<size(); i++){
