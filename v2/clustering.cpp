@@ -33,20 +33,40 @@ std::vector<int> heatClustering(const std::vector<std::vector<double>>& data,dou
     return heatClustering(*kNN, minClusterSize, concentrationRadius, significance, bandWidth, timeScale, true);
 };
 
+std::unique_ptr<Graph> reduce(const Graph& G, int k, bool reduced){
+    if(reduced){
+        //already reduced, simply copy
+        std::unique_ptr<Graph> reducedGraph(new Graph(G));
+        return reducedGraph;
+    }
+    std::unique_ptr<Graph> kNN = getkNN(G,k);
+    return kNN;
+}
+
 std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced){
-    std::vector<int> clusterLabels(G.size(),-1);
-    int k = std::log(G.size()+1)+1;
-    std::unique_ptr<Graph> kNN=getkNN(G,k);
-    ClusteringHelper Helper;
+    std::vector<int> clusterLabels(G.size(),-1); //return variable
+    int k = std::log(G.size()+1)+1; //size of kNN 
+    std::unique_ptr<Graph> kNN=reduce(G,k,reduced); //get kNN
+    
+    //split kNN into components
     std::vector<int> componentLabels=kNN->getComponentLabels();
+    int componentCount =  kNN->componentCount();
+    std::vector<std::vector<Node*>> componentVertices(componentCount);
+    for(int i=0; i<kNN->size(); i++){
+        componentVertices[componentLabels[i]].push_back(&(kNN->getVertex(i)));
+    }
+    std::vector<std::unique_ptr<Graph>> components(componentCount);
+    for(int j=0; j<componentCount; j++){
+        std::unique_ptr<Graph> component(new Graph(componentVertices[j]));
+        components[j]=std::move(component);
+    }
+
 
     /*
     
     TO DO
     
     */
-
-   //split into components
    //apply heatClusteringConnected to components
    //collect labels from those and update clusterLabesl
 
