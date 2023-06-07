@@ -39,7 +39,7 @@ std::vector<int> heatClustering(const std::vector<std::vector<double>>& data,dou
     return heatClustering(*kNN, minClusterSize, concentrationRadius, significance, bandWidth, timeScale, true);
 };
 
-std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced=false){
+std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced){
     std::vector<int> clusterLabels(G.size(),-1);
     int k = std::log(G.size()+1)+1;
     std::unique_ptr<Graph> kNN=getkNN(G,k);

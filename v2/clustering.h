@@ -4,9 +4,10 @@
 //main.cpp
 //graph.cpp
 
-
 #ifndef CLUSTERING_H
 #define CLUSTERING_H
+
+#include "graph.h"
 
 #include <vector>
 #include <unordered_map>
@@ -24,6 +25,12 @@
 /// @param minClusterSize relative size minimally required to be a cluster
 /// @return vector of labels, indexed as input data
 std::vector<int> oneDimensionalClustering(const std::vector<double>& data, const double significance, const double bandWidth, const double minClusterSize);
+
+
+
+
+std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced=false);
+std::vector<int> heatClustering(const std::vector<std::vector<double>>& data,double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
 
 
 //Helper class to implement oneDimensionalClustering
@@ -44,6 +51,5 @@ public: //change back to private
 
     std::vector<std::pair<int,int>> getClusterSplits(const std::vector<std::pair<int,double>>& dataInd, const double significance, const double bandWidth, const double minClusterSize);
 };
-
 
 #endif //CLUSTERING_H
