@@ -5,13 +5,7 @@
 #include "graph.h"
 #include "clustering.h"
 
-//helper class to split heatClustering function into various methods not to be accessed elsewhere
-class ClusteringHelper{
-private:
-    friend std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced);
-    int selectStartNode(const Graph& G, const std::vector<int>& clusterLabels);
-    std::vector<int> heatClusteringConnected(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
-};
+
 
 int ClusteringHelper::selectStartNode(const Graph& G, const std::vector<int>& clusterLabels){
     //specifically selects Node that has the most neighbors
@@ -22,7 +16,7 @@ int ClusteringHelper::selectStartNode(const Graph& G, const std::vector<int>& cl
     {
         if(clusterLabels[i]!=-1){continue;}
         //this node is part of a previously detected cluster
-      
+    
         int neighborCount=G.getVertex(i).neighborCount();
         if(neighborCount>maxNeighborCount)
         {

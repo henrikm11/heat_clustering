@@ -27,12 +27,6 @@
 std::vector<int> oneDimensionalClustering(const std::vector<double>& data, const double significance, const double bandWidth, const double minClusterSize);
 
 
-
-
-std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced=false);
-std::vector<int> heatClustering(const std::vector<std::vector<double>>& data,double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
-
-
 //Helper class to implement oneDimensionalClustering
 class OneDimClusterHelper{
 public: //change back to private
@@ -50,6 +44,16 @@ public: //change back to private
     double getExpectedBaseWindowCount(const std::vector<std::pair<int,double>>& dataInd, const double bandWidth);
 
     std::vector<std::pair<int,int>> getClusterSplits(const std::vector<std::pair<int,double>>& dataInd, const double significance, const double bandWidth, const double minClusterSize);
+};
+
+std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced=false);
+std::vector<int> heatClustering(const std::vector<std::vector<double>>& data,double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
+
+class ClusteringHelper{
+private:
+    friend std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced);
+    int selectStartNode(const Graph& G, const std::vector<int>& clusterLabels);
+    std::vector<int> heatClusteringConnected(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
 };
 
 #endif //CLUSTERING_H
