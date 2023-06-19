@@ -360,7 +360,7 @@ void Graph::gaussianDistances(double concentrationRadius){
     return;
 }
 
-bool Graph::isConnected(){
+bool Graph::isConnected() const {
     if(size()<=1){return true;}
     std::set<Node*> visited;
     std::queue<Node*> visitNext({&getVertex(0)});
@@ -376,6 +376,12 @@ bool Graph::isConnected(){
     return visited.size()==size();
 }
 
+int Graph::componentCount(){
+    std::vector<int> labels =  getComponentLabels();
+    auto max_it=std::max_element(labels.begin(),labels.end());
+    return *(max_it)+1;
+}
+
 std::vector<int> Graph::getComponentLabels(){
     updateAdjacencyLists();
     std::vector<int> componentLabels(size(),-1);
@@ -383,7 +389,7 @@ std::vector<int> Graph::getComponentLabels(){
     int currLabel=0;
     int startPos=0;
     while(visitedCount<size()){
-        std::queue<int> visitNext;\
+        std::queue<int> visitNext;
         //bfs label and count when pushing in queue
         for(int i=startPos; i<size();i++){
             if(componentLabels[i]==-1){

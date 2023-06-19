@@ -105,7 +105,8 @@ public:
     void normalizeDistances(double newMinDist=1);
     void gaussianDistances(double concentrationRadius);
 
-    bool isConnected(void);
+    bool isConnected(void) const;
+    int componentCount(void);
     std::vector<int> getComponentLabels(void);
     
     
