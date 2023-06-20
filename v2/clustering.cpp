@@ -34,6 +34,7 @@ std::vector<int> heatClustering(
     bool reduced
     ){
     std::vector<int> clusterLabels(G.size(),-1); //return variable
+
     int k = std::log(G.size()+1)+1; //size of kNN 
     std::unique_ptr<Graph> kNN=reduce(G,k,reduced); //get kNN
     
@@ -50,7 +51,7 @@ std::vector<int> heatClustering(
         components[j]=std::move(component);
     }
 
-    //get labels on components
+    //get labels on components using Helper function
     ClusteringHelper Helper;
     std::vector<std::vector<int>> clusterLabelsOnComponents;
     for(size_t i=0; i<componentCount; i++){
@@ -66,13 +67,20 @@ std::vector<int> heatClustering(
         clusterLabelsOnComponents.push_back(clusterLabelsComponent);
     }
 
+    std::vector<int> labelCorrections(componentCount,0);
+    int correction=0;
+    for(int i=0; i<componentCount; i++){
+        labelCorrections[i]=correction;
+        correction+=*(std::max(clusterLabelsOnComponents[i].begin(), clusterLabelsOnComponents[i].end()));
+        correction++;
+    }
 
-    /*
-    
-    TO DO
-    
-    */
-   //update clusterLabes globally using labels on components
+    std::vector<int> posInComponent(componentCount,0);
+    for(size_t i=0; i<kNN->size(); i++){
+        int currComponent=componentLabels[i];
+        clusterLabels[i]=clusterLabelsOnComponents[currComponent][posInComponent[currComponent]]+labelCorrections[currComponent];
+        posInComponent[currComponent]++;
+    }
 
     return clusterLabels;
 }
