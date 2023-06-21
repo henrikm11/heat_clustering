@@ -52,8 +52,9 @@ std::vector<int> heatClustering(const std::vector<std::vector<double>>& data,dou
 class ClusteringHelper{
 private:
     friend std::vector<int> heatClustering(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale, bool reduced);
-    int selectStartNode(const Graph& G, const std::vector<int>& clusterLabels);
-    std::vector<int> heatClusteringConnected(const Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
+    int selectSourceNode(const Graph& G, const int minClusterSize, const std::vector<int>& clusterLabels, int& startInd, const int pointsLabeledCurrRound);
+    std::vector<int> heatClusteringConnected(Graph& G, double minClusterSize, double concentrationRadius, double significance, double bandWidth, double timeScale);
+    //not const Graph since we change distances to be Gaussian
 };
 
 #endif //CLUSTERING_H
