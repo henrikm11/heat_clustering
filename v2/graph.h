@@ -103,6 +103,9 @@ public:
     /// @brief normalizes distances to newMinDist(=1 by defaul)
     /// @param  newMinDist new minimum distance
     void normalizeDistances(double newMinDist=1);
+
+    /// @brief updates distances to gaussian distances: d -> e^(d/cR) and normalizes afterwards
+    /// @param concentrationRadius 
     void gaussianDistances(double concentrationRadius);
 
     bool isConnected(void) const;

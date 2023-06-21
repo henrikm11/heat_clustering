@@ -332,8 +332,6 @@ void Graph::normalizeDistances(double newMinDist){
     return;
 }
 
-/// @brief updates distances to gaussian distances: d -> e^(d/cR) and normalizes afterwards
-/// @param concentrationRadius 
 void Graph::gaussianDistances(double concentrationRadius){
     if(concentrationRadius==0){
         throw(std::invalid_argument("Graph::gaussianDistances():concentrationRadius=0"));
