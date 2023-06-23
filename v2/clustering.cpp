@@ -154,10 +154,6 @@ std::vector<int> ClusteringHelper::heatClusteringConnected(
     G.gaussianDistances(concentrationRadius); //change distances to be Gaussian and normalizes
     std::vector<int> clusterLabels(G.size(),-1);
 
-    /*
-    TO DO
-    finish adjustment of old code
-    */
 
     double cutOffStep=minClusterSize/2; 
     int pointsLabeled=0; //keeps track of how many points we have identified to belong to clusters
@@ -187,9 +183,50 @@ std::vector<int> ClusteringHelper::heatClusteringConnected(
         //if cluster containing source contains x*size of all points 
         //we expect it to find when heatDistribution[source]~1/(x*size)
             const double inf = std::numeric_limits<double>::infinity();
-            double heatSourcePrev = inf;
-            double gradientHeatSource=inf;
-            double maxGradient = -1;
+            double heatSourcePrev = inf, gradientHeatSource=inf, maxGradient=-1;
+            double low=0, high=1; //min, max of current heat Distribution, updated by heatIteration
+            while(heatDistribution[sourceNodeIdx]>cutOff){
+                //let heat dissipate 
+                G.heatIterationStep(heatDistribution, timeScale, low, high);
+                gradientHeatSource = std::abs(heatDistribution[sourceNodeIdx]-heatSourcePrev);
+                if(gradientHeatSource<inf){maxGradient = std::max(maxGradient, gradientHeatSource);}
+                if((significance)*(significance)*gradientHeatSource < maxGradient){
+                    //small (time) gradient at source, attempt 1D clustering
+                    cutOffStep-=minClusterSize; //this way the cuttOff is changed back to same value below
+                    break;
+                }          
+                heatSourcePrev = heatDistribution[sourceNodeIdx];
+            }
+
+            //we can now use 1D clustering to check if we have already found clusters
+            // otherwise we keep dissipating heat
+
+            std::vector<int> heatLabels=oneDimensionalClustering(
+                heatDistribution,
+                significance,
+                bandWidth,
+                minClusterSize
+            );
+            
+            bool foundCluster=false;
+            for(int label : heatLabels){
+                if(label!=-1){
+                    foundCluster=true;
+                    break;
+                }
+            }
+            if(foundCluster){
+                //label points accordingly
+
+            }
+            
+    /*
+    TO DO
+    finish adjustment of old code
+    */
+
+
+
 
         }
 
@@ -242,6 +279,10 @@ std::vector<int> ClusteringHelper::heatClusteringConnected(
             //1D clustering
             std::unordered_map<double,int>* heatLabel=oneDimensionalClustering(heatVector, significance, bandWidth, minClusterSize);
             
+
+            //HERE
+
+
             if(heatLabel->size()>0)
             {
                 //1D clustering ensures clusters has at least minCLusterSize
