@@ -185,8 +185,8 @@ std::vector<int> ClusteringHelper::heatClusteringConnected(
             const double inf = std::numeric_limits<double>::infinity();
             double heatSourcePrev = inf, gradientHeatSource=inf, maxGradient=-1;
             double low=0, high=1; //min, max of current heat Distribution, updated by heatIteration
-            while(heatDistribution[sourceNodeIdx]>cutOff){
-                //let heat dissipate 
+            
+            while(heatDistribution[sourceNodeIdx]>cutOff){//let heat dissipate 
                 G.heatIterationStep(heatDistribution, timeScale, low, high);
                 gradientHeatSource = std::abs(heatDistribution[sourceNodeIdx]-heatSourcePrev);
                 if(gradientHeatSource<inf){maxGradient = std::max(maxGradient, gradientHeatSource);}
@@ -209,15 +209,26 @@ std::vector<int> ClusteringHelper::heatClusteringConnected(
             );
             
             bool foundCluster=false;
-            for(int label : heatLabels){
+            for(int label : heatLabels){ //check if cluster found
                 if(label!=-1){
                     foundCluster=true;
                     break;
                 }
             }
-            if(foundCluster){
-                //label points accordingly
-
+            if(foundCluster){ //label points accordingly
+                //1D clustering ensures clusters has at least minCLusterSize
+                int localCorrection=0;
+                for(int i=0; i<G.size();i++){
+                    if(heatLabels[i]!=-1 && clusterLabels[i]==-1){
+                        clusterLabels[i]=heatLabels[i]+clusterLabelCorrection;
+                        pointsLabeledCurrRound++;
+                        pointsLabeled++;
+                        localCorrection=std::max(localCorrection, heatLabels[i]);
+                    }
+                }
+                clusterLabelCorrection+=localCorrection+1;
+                //more efficient so restart heatflow from another source, hence we stop here
+                break; 
             }
             
     /*
