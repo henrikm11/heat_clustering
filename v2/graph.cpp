@@ -56,6 +56,8 @@ Graph::Graph(const Graph& originalGraph)
     {}
 
 Graph& Graph::operator=(const Graph& originalGraph){
+    //check for self assignment
+    if(this==&originalGraph){return *this;}
     //delete old nodes
     for(size_t i=0; i<size(); i++){
         delete vertices_[i];
